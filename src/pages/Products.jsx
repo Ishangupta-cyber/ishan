@@ -4,28 +4,30 @@ import { useNavigate } from 'react-router-dom';
 export default function Products() {
   const navigate = useNavigate();
 
-  const products = [
-    {
-      id: 1,
-      title: "Fjallraven - Foldsack No. 1 Backpack",
-      price: 109.95,
-      category: "men's clothing",
-      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-      rating: { rate: 3.9 },
-      count: 10
-    },
-    {
-      id: 2,
-      title: "Mens Casual Premium Slim Fit T-Shirts",
-      price: 22.3,
-      category: "men's clothing",
-      image: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
-      rating: { rate: 4.1 },
-      count: 0 
-    }
-  ];
-  const loading = false;
-  const error = null;
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json();
+      })
+      .then(data => {
+        // Map the fakeapi data to include 'count' for the stock UI
+        const dataWithStock = data.map(item => ({
+          ...item,
+          count: item.rating ? item.rating.count : 10
+        }));
+        setProducts(dataWithStock);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
