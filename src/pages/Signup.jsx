@@ -15,7 +15,7 @@ export default function Signup() {
       return;
     }
 
-    const userData = { name, email, password };
+    const userData = { name, email, password, role: 'user' };
     
     const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
     
