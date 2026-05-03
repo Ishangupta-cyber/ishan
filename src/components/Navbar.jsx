@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { CartContext } from '../context/CartContext';
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { totalQuantity } = useContext(CartContext);
+
   useEffect(() => {
     let savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -33,7 +36,7 @@ export default function Navbar() {
         
         {user ? (
           <>
-            <Link to="/cart" style={{ color: 'white', textDecoration: 'none' }}>Cart</Link>
+            <Link to="/cart" style={{ color: 'white', textDecoration: 'none' }}>Cart ({totalQuantity})</Link>
             
             {user.role === 'admin' && (
               <Link to="/inventory" style={{ color: 'white', textDecoration: 'none' }}>Inventory</Link>

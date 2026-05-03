@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../context/CartContext';
 
 export default function Products() {
   const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,7 @@ export default function Products() {
   }, [searchTerm]);
 
   function handleAddToCart(product) {
+    addToCart(product);
     alert("Added " + product.title + " to cart!");
   }
 
